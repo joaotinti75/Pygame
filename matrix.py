@@ -10,6 +10,7 @@ SCREEN_HEIGHT = 480
 FONT_SIZE = 20
 WHITE = (255,255,255)
 GREEN = (0, 160, 0)
+BLACK = (0, 0, 0)
 FPS = 15
 generate = False
 
@@ -36,53 +37,23 @@ class Codeline:
         self.lista_letters.append(randomic_letter)
 
         for msg, y in zip(self.lista_letters, self.lista_ypos):
-            if self.lista_letters.index(msg) == len(self.lista_letters) - 1:
-                if self.lista_letters.count(msg) < 2:
-                    message = f'{msg}'
-                    text = fonte.render(message, True, WHITE)
-                    screen.blit(text, (self.xpos, y))
-                else:
-                    message = f'{msg}'
-                    text = fonte.render(self.lista_letters[-1], True, WHITE)
-                    screen.blit(text, (self.xpos, y))
-                    for i in range(self.lista_letters[:-1].count(msg)):
-                        message = f'{msg}'
-                        text = fonte.render(message, True, GREEN)
-                        screen.blit(text, (self.xpos, y))
-            else:
-                    message = f'{msg}'
-                    text = fonte.render(message, True, GREEN)
-                    screen.blit(text, (self.xpos, y))
-    
-        '''for msg, y in zip(self.lista_letters, self.lista_ypos):
-            if self.lista_letters[-1] == msg:
-                if msg in self.lista_letters[:-1]:
-                    message = f'{msg}'
-                    text = fonte.render(message, True, GREEN)
-                    screen.blit(text, (self.xpos, y))
-                else:
-                    message = f'{msg}'
-                    text = fonte.render(message, True, WHITE)
-                    screen.blit(text, (self.xpos, y))
-            else:
-                message = f'{msg}'
-                text = fonte.render(message, True, GREEN)
-                screen.blit(text, (self.xpos, y))'''
+            message = f'{msg}'
+            text = fonte.render(message, True, GREEN)
+            screen.blit(text, (self.xpos, y))
 
     def desloc_codeline(self): #method that moves the letters on screen
         self.ypos += FONT_SIZE - 6 
         self.lista_ypos.append(self.ypos)
+        message = f'{self.lista_letters[-1]}'
+        text = fonte.render(message, True, WHITE)
+        screen.blit(text, (self.xpos, self.lista_ypos[-1]))
 
 obj_list = []
 repeat_list = []
-'''
-for i in range(200):
-    obj = Codeline()
-    obj_list.append(obj)'''
 
-def insert_obj(obj_list, generate):
+def insert_obj(obj_list, generate, counter):
     if generate: #if generate is True, the for loop will continuously create new objects
-        for i in range(10): #creating objects and saving them in a list
+        for i in range(counter): #creating objects and saving them in a list
             obj = Codeline()
             if obj.xpos in repeat_list or obj.ypos > SCREEN_HEIGHT:
                 del obj
@@ -108,7 +79,13 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             exit()
-        
+
+    for c in range(counter): 
+        if current_time - initial_time > 1000:
+            generate = True
+            initial_time = pygame.time.get_ticks()
+            counter += 1
+    '''    
     if counter < 20:    
         if current_time - initial_time > 1000:
             generate = True
@@ -116,14 +93,9 @@ while True:
             counter += 1
     else:
         generate = False
-
+    '''
     current_time = pygame.time.get_ticks()
 
-
-    insert_obj(obj_list, generate)
-
-    '''for i in obj_list:
-        i.draw_codeline()
-        i.desloc_codeline()'''
+    insert_obj(obj_list, generate, counter)
 
     pygame.display.flip()
