@@ -1,2 +1,4 @@
 # Pygame
-Games that i did using pygame library
+Games and animations that i did using pygame library
+
+1.MATRIX ANIMATION
