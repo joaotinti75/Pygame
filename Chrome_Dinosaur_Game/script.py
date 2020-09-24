@@ -34,7 +34,7 @@ class Dino(pygame.sprite.Sprite):
         self.up = False
         self.xpos = 50
         self.ypos = (SCREEN_HEIGHT // 2) + 140
-        root = 'dino_google_game/sprites/dino'
+        root = 'sprites/dino'
         self.dino_imgs = [f'{root}/dinossaur{i}.png' for i in range(3)]
 
         self.index = 0
@@ -72,7 +72,7 @@ class Dino(pygame.sprite.Sprite):
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        root = 'dino_google_game/sprites/obstacle'
+        root = 'sprites/obstacle'
         self.obstacle_imgs = [f'{root}/obstacle0.png']
 
         self.image = pygame.image.load(self.obstacle_imgs[0]).convert_alpha()
@@ -86,7 +86,7 @@ class Obstacle(pygame.sprite.Sprite):
 class Clouds(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        root_clouds = 'dino_google_game/sprites/background/clouds'
+        root_clouds = 'sprites/background/clouds'
         self.cloud_imgs = [f'{root_clouds}/clouds0.png']
 
         self.image = pygame.image.load(self.cloud_imgs[0]).convert_alpha()
@@ -97,7 +97,7 @@ class Clouds(pygame.sprite.Sprite):
 class Floor(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        root_floor = 'dino_google_game/sprites/background/floor'
+        root_floor = 'sprites/background/floor'
         self.floor_imgs = [f'{root_floor}/floor0.png']
 
         self.image = pygame.image.load(self.floor_imgs[0]).convert_alpha()
