@@ -1,13 +1,17 @@
 import pygame
 from sys import exit
 from random import randrange, choice
-
 import os
 
-x = 500
-y = 400
+'''
+x = 800 #500
+y = 700 #400
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = f'{(x, y)}'
+'''
+os.environ['SDL_VIDEO_CENTERED'] = '0'
+
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 pygame.init()
 
@@ -28,20 +32,20 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 song = 0
 
 font = pygame.font.SysFont('comicsansms', 40, True, True)
-score_sound = pygame.mixer.Sound('dino_google_game/songs/score_sound.wav')
+score_sound = pygame.mixer.Sound(os.path.join(THIS_FOLDER,'score_sound.wav'))
+score_sound.set_volume(0.2)
 
 class Dino(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.jump_sound = pygame.mixer.Sound('dino_google_game/songs/jump_sound.wav')
-        self.death_sound = pygame.mixer.Sound('dino_google_game/songs/death_sound.wav')
+        self.jump_sound = pygame.mixer.Sound(os.path.join(THIS_FOLDER,'jump_sound.wav'))
+        self.death_sound = pygame.mixer.Sound(os.path.join(THIS_FOLDER, 'death_sound.wav'))
         
         self.up = False
         self.stop = False
         self.xpos = 50
         self.ypos = (SCREEN_HEIGHT // 2) + 140
-        root = 'dino_google_game/sprites/dino'
-        self.dino_imgs = [f'{root}/dinossaur{i}.png' for i in range(3)]
+        self.dino_imgs = [os.path.join(THIS_FOLDER,f'dinossaur{i}.png') for i in range(3)]
 
         self.index = 0
         self.image = pygame.image.load(self.dino_imgs[self.index]).convert_alpha()
@@ -92,8 +96,7 @@ class Dino(pygame.sprite.Sprite):
 class Flying_dino(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()        
-        root = 'dino_google_game/sprites/dino/flying_dino'
-        self.flying_dino_imgs = [f'{root}/fly_dino{i}.png' for i in range(2)]
+        self.flying_dino_imgs = [os.path.join(THIS_FOLDER, f'fly_dino{i}.png') for i in range(2)]
         self.stop = False
         self.index = 0
         self.image = pygame.image.load(self.flying_dino_imgs[self.index]).convert_alpha()
@@ -119,8 +122,7 @@ class Flying_dino(pygame.sprite.Sprite):
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        root = 'dino_google_game/sprites/obstacle'
-        self.obstacle_imgs = [f'{root}/obstacle0.png']
+        self.obstacle_imgs = [os.path.join(THIS_FOLDER,'obstacle0.png')]
 
         self.image = pygame.image.load(self.obstacle_imgs[0]).convert_alpha()
         self.mask = pygame.mask.from_surface(self.image)
@@ -132,8 +134,7 @@ class Obstacle(pygame.sprite.Sprite):
 class Clouds(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        root_clouds = 'dino_google_game/sprites/background/clouds'
-        self.cloud_imgs = [f'{root_clouds}/clouds0.png']
+        self.cloud_imgs = [os.path.join(THIS_FOLDER,'clouds0.png')]
 
         self.image = pygame.image.load(self.cloud_imgs[0]).convert_alpha()
         self.image = pygame.transform.scale(self.image, (148, 148))
@@ -149,8 +150,7 @@ class Clouds(pygame.sprite.Sprite):
 class Floor(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        root_floor = 'dino_google_game/sprites/background/floor'
-        self.floor_imgs = [f'{root_floor}/floor0.png']
+        self.floor_imgs = [os.path.join(THIS_FOLDER,'floor0.png')]
 
         self.image = pygame.image.load(self.floor_imgs[0]).convert_alpha()
         self.image = pygame.transform.scale(self.image, (64, 64))
@@ -210,7 +210,15 @@ while True:
                     dino.jump()
         
             if event.key == pygame.K_r and GAME_OVER == True:
-                pass
+                GAME_SPEED = 10
+                FLOOR_SPEED = 10
+                points = 0
+                song = 0
+                obstacle.rect[0] = SCREEN_WIDTH
+                flying_dino.rect[0] = SCREEN_WIDTH
+                dino.stop = False
+                dino.rect[1] = dino.ypos
+                flying_dino.stop = False
 
     dino_group.draw(screen)
     dino_group.update()
@@ -249,7 +257,10 @@ while True:
         
     else:
         points += 0
-        song += 1
+        if song > 1:
+            song = 2
+        else:
+            song += 1
         dino.jump_sound.stop()
         txt = ['GAME OVER', 'Press R to play again']
         line1 = font.render(txt[0], True, BLACK)
@@ -260,6 +271,6 @@ while True:
 
     if song == 1:
         dino.death_sound.play()
-
+        
     pygame.display.flip()
 
