@@ -1,5 +1,13 @@
 # Pygame
 Games and animations that i did using pygame library
+to install:
+```shell
+pip install pygame
+```
+or:
+```shell
+pip3 install pygame
+```
 
 1. DINO GAME [Link to the video](https://www.youtube.com/watch?v=slV0hbIJGGk&t=27s)
 
